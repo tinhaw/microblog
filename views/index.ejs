@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+    <style>
+        .form-wrap{display: inline-block;vertical-align: middle;margin-right: 50px}
+        .visitor-hint{margin-top: 70px}
+        .input-group-text{width: 100px}
+        .jumbotron{position: relative}
+        .reg-hint{position: absolute;width: 90%;bottom: -25px;left:100px;display: none}
+        .author-name{margin-left: 10px;font-size: 20px}
+        #blog-card{height: 300px}
+        #user-card{height: 400px}
+        #password,#username{display: inline-block;width: 200px}
+    </style>
+    <title>微博主页</title>
+</head>
+<body>
+<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
+    <a class="navbar-brand" href="#">微博</a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+            <a class="nav-link" href="#">首页</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/allUsers">用户列表</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/allBlogs">全部微博</a>
+        </li>
+        <%if(login==1){%>
+        <li class="nav-item">
+            <a class="nav-link" href="/home">个人主页</a>
+        </li>
+        <%}%>
+    </ul>
+
+    <div class="form-wrap">
+        <%if(login==1){%>
+            <span class="text-light"><%=username%>，欢迎您回来！</span><button class="btn btn-primary btn-sm" id="btn-quit">退出</button>
+        <%}else{%>
+            <label for="username" class="text-light">用户名：</label>
+            <input type="text" class="form-control form-control-sm mr-2" id="username" placeholder="请输入用户名">
+            <label for="password" class="text-light">密码：</label>
+            <input type="password" class="form-control form-control-sm mr-2" id="password" placeholder="请输入密码">
+            <button class="btn btn-primary mr-4" id="login-btn">登录</button>
+        <%}%>
+    </div>
+</nav>
+<div class="container visitor-hint">
+    <div class="jumbotron mb-1">
+        <%if(login==1){%>
+            <div class="row">
+                <div class="col-sm-3 offset-sm-1">
+                    <div class="card" id="user-card">
+                        <img class="card-img-top" src='<%=avatarAdd%>'/>
+                        <div class="card-body">
+                            <p class="card-text">用户名：<%=username%></p>
+                            <p class="card-text">性别：<%=sex%></p>
+                            <p class="card-text">年龄：<%=age%></p>
+                            <p>个人简介：<%=intro%></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <h5>发布新博客：</h5>
+                    <textarea class="form-control mb-2" id="blogTextarea1" rows="6" placeholder="限140字"></textarea>
+                    <button class="btn btn-primary" id="btn-post">发布</button>
+                </div>
+            </div>
+        <%}else{%>
+            <h3 class="mb-5"><%=username%>您好，请注册（或从右上角登录主页）</h3>
+
+            <div class="row">
+                <div class="col-sm-6 offset-sm-3">
+                    <!--<form>-->
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">用户名:</div>
+                        </div>
+                        <input type="text" class="form-control" id="regname" placeholder="请输入用户名">
+                    </div>
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">密码：</div>
+                        </div>
+                        <input type="password" class="form-control" id="regpwd1" placeholder="请输入密码">
+                    </div>
+                    <div class="input-group mb-4">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">确认密码：</div>
+                        </div>
+                        <input type="password" class="form-control" id="regpwd2" placeholder="请再次输入密码">
+                    </div>
+
+                    <button class="btn btn-primary" id="reg-btn">注册</button>
+                    <!--</form>-->
+                    <div class="alert alert-danger reg-hint" id="reg-hint1" role="alert">
+
+                    </div>
+                    <div class="alert alert-success reg-hint" id="reg-hint2" role="alert">
+
+                    </div>
+                </div>
+            </div>
+
+        <%}%>
+    </div>
+</div>
+<div class="container">
+    <nav class="navbar navbar-dark bg-primary mb-1 rounded">
+        <span class="navbar-brand">最新微博</span><button type="button" class="btn btn-dark" id="last-blog">刷新</button>
+    </nav>
+    <div class="row" id="last-wrap">
+
+
+
+    </div>
+</div>
+</body>
+<script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<script type="text/template" id="blog-temp">
+    <div class="col-sm-3">
+        <div class="card text-white bg-info mb-3" id="blog-card">
+            <div class="card-header"><img src=@avatarAdd@ alt="" class="rounded-circle" style="width: 50px"><span class="author-name">@author@</span></div>
+            <div class="card-body">
+                <p class="card-text">@content@</p>
+            </div>
+            <div class="card-footer">日期：@date@</div>
+        </div>
+    </div>
+</script>
+<script type="text/javascript" src="/js/loadLastBlog.js"></script>
+<script type="text/javascript" src="/js/reqBlog.js"></script>
+<script>
+
+    $("#reg-btn").click(function () {
+        var username=$('#regname').val();
+        var password1=$('#regpwd1').val();
+        var password2=$('#regpwd2').val();
+        $('#regname').val('');
+        $('#regpwd1').val('');
+        $('#regpwd2').val('');
+
+        //校验密码
+        //校验两次密码是否一致
+        if (password1!=password2){
+            $('#reg-hint1').fadeIn().html('两次输入的密码不一致，请重新输入。');
+            return;
+        }
+        //校验密码位数
+        if(password1.length<6){
+            $('#reg-hint1').fadeIn().html('密码小于6位，请重新输入。');
+            return;
+        }else if (password1.length>16) {
+            $('#reg-hint1').fadeIn().html('密码大于16位，请重新输入。');
+            return;
+        }
+        //校验密码的字符类型
+        if (!(/[\w]/ig.test(password1))){
+            $('#reg-hint1').fadeIn().html('密码不含字母、数字或者下划线，请重新输入。');
+            return;
+        }else if(!(/[\W]/g.test(password1))){
+            $('#reg-hint1').fadeIn().html('密码必须包含特殊字符，请重新输入。');
+            return;
+        }
+
+        //封装数据
+        var data={
+          username:username,
+          password:password1
+        };
+
+       $.post('/doRegister',data,function (json) {
+           console.log('注册时返回json:');
+           console.log(json);
+           if(json.result==1){
+               $('#reg-hint2').fadeIn().html('注册成功，请登录。');
+           }else if(json.result==-2){
+               $('#reg-hint1').fadeIn().html('用户名已被注册，请重新选择用户名。');
+           }else if (json.result==-1) {
+               $('#reg-hint1').fadeIn().html('注册失败，请重新注册。');
+           }
+           console.log(json);
+       });
+    });
+
+
+    $('#login-btn').click(function () {
+        var username=$('#username').val();
+        var password=$('#password').val();
+        var data={
+            username:username,
+            password:password
+        };
+
+        $('#username').val('');
+        $('#password').val('');
+
+
+        $.post('/doLogin',data,function (json) {
+            if (json.result==-1){
+                alert('用户名或密码错误');
+            }else if(json.result==-2){
+                alert('登录失败');
+            }else if (json.result==1){
+                alert('登录成功');
+                window.location='/';
+            }
+            console.log('登录json:'+json);
+        });
+
+    });
+
+
+    $('input').focus(function () {
+        $('.reg-hint').fadeOut();
+    });
+
+    $("#last-blog").click(function () {
+        reqBlog(0,4,true,false);
+    });
+
+    $('#btn-quit').click(function () {
+       $.post('/doLogout',function (json) {
+
+            window.location='/';
+       });
+    });
+
+    $('#btn-post').click(function () {
+        var content=$('#blogTextarea1').val();
+        var date=new Date();
+        var data={
+            content:content,
+            date:date
+        }
+
+        $('#blogTextarea1').val('');
+
+        $.post('/postBlog',data,function (json) {
+            if(json.result==1){
+                //发布成功
+                alert('发布成功');
+                reqBlog(0,4,true,false);
+            }else if (json.result==-1) {
+                //发布失败
+                alert('发布失败');
+            }
+        });
+
+    });
+    reqBlog(0,4,true,false);
+</script>
+</html>

@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "formidable": "^1.2.1",
+    "gm": "^1.23.1",
+    "mongodb": "^3.1.13",
+    "multer": "^1.4.1",
+    "silly-datetime": "^0.1.2"
+  },
+  "name": "microblog",
+  "version": "1.0.0",
+  "description": "microblog",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinhaw/microblog.git"
+  },
+  "author": "dinghao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tinhaw/microblog/issues"
+  },
+  "homepage": "https://github.com/tinhaw/microblog#readme"
+}

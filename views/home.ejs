@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery.Jcrop.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.Jcrop.js"></script>
+
+    <style>
+        #password,#username{display: inline-block;width: 200px}
+        .jumbotron{margin-top: 70px}
+        .form-wrap{display: inline-block;vertical-align: middle;margin-right: 50px}
+
+        /*.pf-item{height: 30px;line-height: 30px}*/
+        .pf-label{float: left;text-align: right;width: 100px;font-weight: bold}
+        .pf-cont{margin-left: 70px;padding-left:10px}
+        .row{margin-bottom:0}
+        #cut-btn{margin-top: 10px}
+        .priview-container{width:150px;height:150px;padding: 5px;box-sizing: content-box;background-color: white;
+            box-shadow: 0 0 5px black;border-radius: 3px}
+        .crop-container{width: 500px;box-sizing: content-box;padding: 5px;box-sizing: content-box;background-color: white;
+            box-shadow: 0 0 5px black;border-radius: 3px}
+        .avatar-wrap{box-sizing: content-box;width: 150px;height:150px;padding: 5px;box-shadow: 0 0 5px black;margin: 0 auto;
+            border-radius: 5px}
+        #avatar-img{width: 150px;height: 150px}
+        .info-wrap{line-height: 38px}
+    </style>
+    <title>个人主页</title>
+</head>
+<body>
+<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
+    <a class="navbar-brand" href="/">微博</a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/allUsers">用户列表</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/allBlogs">全部微博</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/home">个人主页</a>
+        </li>
+    </ul>
+    <div class="form-wrap">
+        <%if(login==1){%>
+        <span class="text-light"><%=username%>，欢迎您回来！</span><button class="btn btn-primary btn-sm" id="btn-quit">退出</button>
+        <%}else{%>
+            <label for="username" class="text-light">用户名：</label>
+            <input type="text" class="form-control form-control-sm mr-2" id="username" placeholder="请输入用户名">
+            <label for="password" class="text-light">密码：</label>
+            <input type="password" class="form-control form-control-sm mr-2" id="password" placeholder="请输入密码">
+            <button class="btn btn-primary mr-4" id="login-btn">登录</button>
+        <%}%>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="jumbotron">
+        <%if(login==1){%>
+            <div class="row">
+                <div class="col-sm-10 offset-sm-1">
+                    <h3 class="text-center">基本信息</h3>
+                    <hr>
+                    <div class="pf-item row mb-3">
+                        <div class="col-sm-2 offset-sm-5 text-center">
+                            <button class="btn btn-outline-primary btn-sm" id="update-profile">修改基本信息</button>
+
+                        </div>
+                    </div>
+                    <!--<div class="pf-item">-->
+                        <!--<div class="pf-label">用户名：</div>-->
+                        <!--<div class="pf-cont" id="username-wrap"><%=username%></div>-->
+                    <!--</div>-->
+                    <!--<div class="pf-item">-->
+                        <!--<div class="pf-label">年龄：</div>-->
+                        <!--<div class="pf-cont" id="age-wrap"><%=age%></div>-->
+                    <!--</div>-->
+                    <!--<div class="pf-item">-->
+                        <!--<div class="pf-label">性别：</div>-->
+                        <!--<div class="pf-cont" id="sex-wrap"><%=sex%></div>-->
+                    <!--</div>-->
+                    <!--<div class="pf-item">-->
+                        <!--<div class="pf-label">个人简介：</div>-->
+                        <!--<div class="pf-cont" id="intro-wrap"><%=intro%></div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group row">-->
+                        <!--<label for="inputPassword3" class="col-sm-2 col-form-label text-right text">用户名：</label>-->
+                        <!--<div class="col-sm-4">-->
+                            <!--<input type="password" class="form-control" id="inputPassword3" value="">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="form-group row">
+                        <label for="username-input" class="col-sm-2 col-form-label text-right font-weight-bold">用户名：</label>
+                        <div class="col-sm-4 info-wrap" id="username-wrap">
+                            <%=username%>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="sex-input" class="col-sm-2 col-form-label text-right font-weight-bold">性别：</label>
+                        <div class="col-sm-4 info-wrap" id="sex-wrap">
+                            <%=sex%>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="age-input" class="col-sm-2 col-form-label text-right font-weight-bold">年龄：</label>
+                        <div class="col-sm-4 info-wrap" id="age-wrap">
+                            <%=age%>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="intro-input" class="col-sm-2 col-form-label text-right font-weight-bold">个人简介：</label>
+                        <div class="col-sm-4 info-wrap" id="intro-wrap">
+                            <%=intro%>
+                        </div>
+                    </div>
+                    <div class="pf-item row mb-3" style="display: none" id="submit-wrap">
+                        <div class="col-sm-4 offset-sm-4 text-center">
+                            <button class="btn btn-primary btn-sm" id="submit-profile">提交修改信息</button>
+                            <button class="btn btn-primary btn-sm" id="check-profile">查看</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-10 offset-sm-1">
+                    <h3 class="text-center">设置头像</h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="text-center avatar-wrap">
+                                <img src="<%=avatarAdd%>" alt="头像无法显示" id="avatar-img">
+                            </div>
+                            <div class="text-center mt-2">
+                                <button class="btn btn-primary btn-sm" id="refresh-avatar">刷新头像</button>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="custom-file mb-2">
+                                <input type="file" class="custom-file-input" id="upload-input" required>
+                                <label class="custom-file-label" for="upload-input">上传头像</label>
+                            </div>
+                            <button class="btn btn-primary" id="upload-btn">确认上传</button>
+                            <div id="upload-hint" class="mt-2"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        <%}else{%>
+            <h3 class="text-center"><a href="/">登录</a>后浏览本页面</h3>
+        <%}%>
+    </div>
+</div>
+</body>
+<script type="text/template" id="cut-temp">
+    <div class="row" style="display: none" id="cut-area">
+        <div class="col-sm-7 offset-sm-1">
+            <h5>在此拾取图像:</h5>
+            <div class="crop-container">
+                <img src=@uploadTempAdd@ id="cropbox" style="width:500px"/>
+            </div>
+            <button class="btn btn-primary" id="cut-btn">裁剪</button>
+        </div>
+        <div class="col-sm-3">
+            <h5>图像预览:</h5>
+            <div class="priview-container">
+                <div style="width:150px;height:150px;overflow:hidden;">
+                    <img src=@uploadTempAdd@ id="preview" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-success cut-hint" role="alert" style="display: none" id="cut-success">
+                头像截取成功。
+            </div>
+            <div class="alert alert-warning cut-hint" role="alert" style="display: none" id="cut-fail">
+                头像截取失败。
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/javascript">
+    function selectImg($) {
+
+        $(function(){
+
+            var jcrop_api;
+            var bounds, boundx, boundy;
+
+
+            $('#cropbox').Jcrop({
+                onChange: showPreview,
+                onSelect: showPreview,
+                aspectRatio: 1
+            },function(){
+                jcrop_api = this;
+                bounds = jcrop_api.getBounds();
+                boundx = bounds[0];
+                boundy = bounds[1];
+            });
+
+            function showPreview(coords)
+            {
+                if (parseInt(coords.w) > 0)
+                {
+                    var rx = 150 / coords.w;
+                    var ry = 150 / coords.h;
+
+                    $('#preview').css({
+                        width: Math.round(rx * boundx) + 'px',
+                        height: Math.round(ry * boundy) + 'px',
+                        marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+                        marginTop: '-' + Math.round(ry * coords.y) + 'px'
+                    });
+                }
+            };
+
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    $('#upload-input').change(function () {
+        $('#upload-hint').html('');
+        var files=$(this).prop('files');
+        for(var i=0;i<files.length;i++){
+            $('<p class="text-info">选择了文件:'+files[i].name+'</p>').appendTo('#upload-hint');
+        }
+    });
+
+    $('#upload-btn').click(function () {
+        console.log('上传按钮被点击了');
+        $('#upload-hint').html('');
+        $(this).attr('disabled','disabled');
+        var formData=new FormData();
+        var files=$('#upload-input').prop('files');
+        console.log('上传文档：\n',files);
+        formData.append('upload_data',files[0]);
+        $(this).removeAttr('disabled');
+        if(files.length==0){
+            alert('请选择上传文件');
+            return;
+        }
+        $.ajax({
+            type:'POST',
+            url:'/uploadAvatar',
+            cache: false,
+            dataType: 'JSON',
+            contentType: false,
+            processData: false,
+            data:formData,
+            success:function (json) {
+                console.log('上传文件：\n');
+                console.log(json);
+                if(json.result==1){
+                    alert('上传成功');
+                    var template=$('#cut-temp').html();
+                    var html=template.replace(/@([\w]+)@/g,function (match,$1) {
+                        return json[$1];
+                    });
+                    $(html).appendTo('.jumbotron');
+                    $('#cut-area').fadeIn();
+                    selectImg(jQuery);
+                }else if(json.result==-1){
+                    alert('上传失败');
+                }
+
+            }
+        });
+    });
+
+    //监听裁切按钮
+    $('.jumbotron').on('click','#cut-btn',function () {
+        console.log('裁剪按钮被点击了');
+        $('.cut-hint').fadeOut();
+        var w=parseInt($('.jcrop-holder>div:first').css('width'));
+        var h=parseInt($('.jcrop-holder>div:first').css('height'));
+        var x=parseInt($('.jcrop-holder>div:first').css('left'));
+        var y=parseInt($('.jcrop-holder>div:first').css('top'));
+        var avatarAdd=$('#cropbox').attr('src');
+
+        if(w&&h){
+            if(avatarAdd=='/avatar/default_avatar.png'){
+                alert('不能对默认头像进行编辑');
+                return;
+            }
+            var data={
+                avatarAdd:avatarAdd,
+                w:w,
+                h:h,
+                x:x,
+                y:y
+            };
+            console.log(avatarAdd);
+            $.get('/cutAvatar',data,function (json) {
+                console.log('切图：');
+                console.log(json);
+                if(json.result==1){
+                    $('#cut-success').fadeIn();
+                }else if(json.result==-1){
+                    $('#cut-fail').fadeIn();
+                }else if(json.result==-2){
+                    alert('头像上传成功，但用户信息更新失败');
+                }
+            });
+        }else{
+            alert("请正确拾取图片");
+        }
+    });
+
+    $('#login-btn').click(function () {
+        var username=$('#username').val();
+        var password=$('#password').val();
+        var data={
+            username:username,
+            password:password
+        };
+
+        $('#username').val('');
+        $('#password').val('');
+
+
+        $.post('/doLogin',data,function (json) {
+            if (json.result==-1){
+                alert('用户名或密码错误');
+            }else if(json.result==-2){
+                alert('登录失败');
+            }else if (json.result==1){
+                alert('登录成功');
+                window.location='/home';
+            }
+            console.log('登录json:'+json);
+        });
+
+    });
+
+    $('#refresh-avatar').click(function () {
+        console.log('刷新头像按钮被点击了');
+       $.post('/reqSelfInfo',function (json) {
+           console.log('刷新头像返回数据json:');
+           console.log(json);
+
+           if(json.error==0){
+               var avatarAdd=json.docs[0].avatarAdd;
+               // $('.avatar-wrap').empty();
+               // $('<img src='+avatarAdd+' alt="头像无法显示" id="avatar-img">').appendTo(".avatar-wrap");
+               // $('<img src="/avatar/default_avatar.png" alt="头像无法显示" id="avatar-img">').appendTo(".avatar-wrap");
+               $('#avatar-img').attr('src',json.docs[0].avatarAdd);
+           }else if(json.error==1){
+              alert('刷新头像失败');
+           }else if(json.error==2){
+               alert('请重新登录后再刷新');
+           }
+       });
+    });
+
+
+    $('#btn-quit').click(function () {
+        $.post('/doLogout',function (json) {
+
+            window.location='/home';
+        });
+    });
+
+
+    //修改基本信息
+    $('#update-profile').click(function () {
+        var $username=$('#username-wrap');
+        var $age=$('#age-wrap');
+        var $sex=$('#sex-wrap');
+        var $intro=$('#intro-wrap');
+
+        var username=$username.html();
+        var age=$age.html();
+        var sex=$sex.html();
+        var intro=$intro.html();
+
+        $username.html('<input type="text" class="form-control form-control-sm" id="username-update" value='+username+' disabled>');
+        $sex.html('<div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="sex" id="male" value="男"><label class="form-check-label" for="male">男</label><input class="form-check-input" type="radio" name="sex" id="female" value="女"><label class="form-check-label" for="female">女</label></div>');
+        $age.html('<input type="text" class="form-control form-control-sm" id="age-update" value='+age+'>');
+        $intro.html('<input type="text" class="form-control form-control-sm" id="intro-update" value='+intro+'>');
+
+        $('input[name="sex"]').each(function () {
+            if($(this).val()==sex){
+                $(this).attr('checked','checked');
+            }
+        });
+
+        $('#submit-wrap').fadeIn();
+    });
+
+    //提交修改信息
+    $('#submit-profile').click(function () {
+       var username=$('#username-update').val();
+       var age=$('#age-update').val();
+       var intro=$('#intro-update').val();
+       var sex=$('input[name="sex"]:checked').val();
+
+       var data={
+           username:username,
+           sex:sex,
+           age:age,
+           intro:intro
+       }
+       console.log("提交的更新信息：");
+       console.log(data);
+
+       $.post('/updateSelf',data,function (json) {
+           console.log(json);
+           if(json.error==0){
+               alert('基本信息更新成功');
+           }else if(json.error==1){
+               alert('基本信息更新失败');
+           }
+       });
+
+    });
+
+    //当查看按钮被点击
+    $('#check-profile').click(function () {
+        $.post('/reqSelfInfo',function (json) {
+            console.log("点击查看按钮后请求回的json:");
+            console.log(json);
+            if(json.error==0){
+                alert('刷新基本信息成功');
+                var username=json.docs[0].username;
+                var age=json.docs[0].age;
+                var sex=json.docs[0].sex;
+                var intro=json.docs[0].intro;
+                $('#username-wrap').html(username);
+                $('#sex-wrap').html(sex);
+                $('#age-wrap').html(age);
+                $('#intro-wrap').html(intro);
+
+
+                $('#submit-wrap').fadeOut();
+            }else if(error==1){
+                alert('刷新基本信息失败');
+            }
+        });
+    });
+</script>
+
+</html>
